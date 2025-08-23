@@ -3,27 +3,21 @@ function vlc_player() {
   const videolink = window.location.href;
   const streamlink = videolink.replace("/watch/", "/download/");
   const clean = streamlink.replace(/^https?:\/\//, "");
-  window.location.href = `intent://${clean}#Intent;action=android.intent.action.VIEW;package=org.videolan.vlc;type=video/*;S.browser_fallback_url=https://play.google.com/store/apps/details?id=org.videolan.vlc;end`;
+  window.location.href = `vlc://${clean}`;
 }
 
 function mx_player() {
   const videolink = window.location.href;
   const streamlink = videolink.replace("/watch/", "/download/");
   const clean = streamlink.replace(/^https?:\/\//, "");
-  window.location.href = `intent://${clean}#Intent;action=android.intent.action.VIEW;package=com.mxtech.videoplayer.ad;type=video/*;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.mxtech.videoplayer.ad;end`;
+  window.location.href = `intent://${clean}#Intent;scheme=https;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`;
 }
 
 function playit_player() {
   const videolink = window.location.href;
   const streamlink = videolink.replace("/watch/", "/download/");
   const clean = streamlink.replace(/^https?:\/\//, "");
-  window.location.href = `intent://${clean}#Intent;action=android.intent.action.VIEW;package=com.playit.videoplayer;type=video/*;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.playit.videoplayer;end`;
-}
-
-function streamDownload() {
-  const videolink = window.location.href;
-  const streamlink = videolink.replace("/watch/", "/download/");
-  window.location.href = streamlink;
+  window.location.href = `intent://${clean}#Intent;package=com.playit.videoplayer;action=android.intent.action.VIEW;end`;
 }
 
 function shareButton() {
@@ -101,21 +95,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   // Add click events to buttons if they exist
-  const copyBtn = document.getElementById('copy-link-btn');
+const copyBtn = document.getElementById('copy-link-btn');
   if (copyBtn) {
     copyBtn.addEventListener('click', copyStreamLink);
   }
   
-  const buttons = document.querySelectorAll('.action-btn');
+const buttons = document.querySelectorAll('.action-btn');
   buttons.forEach(btn => {
     btn.addEventListener('touchstart', function() {
       this.style.transform = 'translateY(2px)';
       this.style.boxShadow = '0 2px 15px rgba(99, 102, 241, 0.4)';
     });
     
-    btn.addEventListener('touchend', function() {
-      this.style.transform = '';
-      this.style.boxShadow = '';
+btn.addEventListener('touchend', function() {
+   this.style.transform = '';
+   this.style.boxShadow = '';
     });
   });
 });
