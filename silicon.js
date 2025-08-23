@@ -1,34 +1,20 @@
-const videolink = window.location.href;
-const streamlink = videolink.replace("/watch/", "/download/");
 
-function vlc_player() {
-  const clean = streamlink.replace(/^https?:\/\//, "");
-  window.location.href = `vlc://${clean}`;
+function openReport() {
+  document.getElementById("myForm").style.display = "block";
 }
-
-function mx_player() {
-  const clean = streamlink.replace(/^https?:\/\//, "");
-  window.location.href = `intent://${clean}#Intent;scheme=https;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`;
+function closeReport() {
+  document.getElementById("myForm").style.display = "none";
 }
-
-function playit_player() {
-  const clean = streamlink.replace(/^https?:\/\//, "");
-  window.location.href = `intent://${clean}#Intent;package=com.playit.videoplayer;action=android.intent.action.VIEW;end`;
+function closeLinkModal() {
+  document.getElementById("link-modal").style.display = "none";
 }
-
-function streamDownload() {
-  const videolink = window.location.href;
-  const streamlink = videolink.replace("/watch/", "/download/");
-  window.location.href = streamlink;
-}
-
 function shareButton() {
   if (navigator.share) {
     const url = window.location.href;
     const title = document.title;
     navigator.share({
       title: title,
-      text: "Watch high-quality videos on this streaming platform.\n\n" + title + "\n",
+      text: "You can watch high-quality videos on this Stream page, one of the most powerful streaming platforms.\n\n" + title + "\n",
       url: url
     })
     .then(() => console.log("Thanks for sharing!"))
@@ -36,6 +22,54 @@ function shareButton() {
   } else {
     alert("Sorry, sharing isn't supported in this browser. Try Google Chrome or copy the link manually.");
   }
+}
+function showAdsLinkModal(url) {
+  const modal = document.getElementById("link-modal");
+  const timerEl = document.getElementById("link-timer");
+  modal.style.display = "block";
+  let timeLeft = 5;
+  const countdown = setInterval(() => {
+    timeLeft--;
+    timerEl.innerHTML = timeLeft;
+    if (timeLeft === 0) {
+      clearInterval(countdown);
+      timerEl.innerHTML = "";
+      window.location.href = url;
+      closeLinkModal();
+    }
+  }, 1000);
+}
+
+function Open_Link(url) {
+  if (url) window.open(url, "_blank");
+}
+function showLinkModal(url) {
+  window.open(url, "_blank");
+}
+function Open_DL(url) {
+  window.location.href = url.replace("replace", "dl");
+}
+function Open_TG(url) {
+  window.location.href = url.replace("replace", "tg");
+}
+
+const videolink = window.location.href;
+const streamlink = videolink.replace("/watch/", "/download/");
+
+function vlc_player() {
+  const clean = streamlink.replace(/^https?:\/\//, "");
+  window.location.href = `vlc://${clean}`;
+}
+function mx_player() {
+  const clean = streamlink.replace(/^https?:\/\//, "");
+  window.location.href = `intent://${clean}#Intent;scheme=https;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`;
+}
+function playit_player() {
+  const clean = streamlink.replace(/^https?:\/\//, "");
+  window.location.href = `intent://${clean}#Intent;package=com.playit.videoplayer;action=android.intent.action.VIEW;end`;
+}
+function streamDownload() {
+  window.location.href = streamlink;
 }
 
 // Copy link function
@@ -97,21 +131,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   // Add click events to buttons if they exist
-  const copyBtn = document.getElementById('copy-link-btn');
+const copyBtn = document.getElementById('copy-link-btn');
   if (copyBtn) {
     copyBtn.addEventListener('click', copyStreamLink);
   }
   
-  const buttons = document.querySelectorAll('.action-btn');
+const buttons = document.querySelectorAll('.action-btn');
   buttons.forEach(btn => {
     btn.addEventListener('touchstart', function() {
       this.style.transform = 'translateY(2px)';
       this.style.boxShadow = '0 2px 15px rgba(99, 102, 241, 0.4)';
     });
     
-    btn.addEventListener('touchend', function() {
-      this.style.transform = '';
-      this.style.boxShadow = '';
+btn.addEventListener('touchend', function() {
+    this.style.transform = '';
+    this.style.boxShadow = '';
     });
   });
 });
+
