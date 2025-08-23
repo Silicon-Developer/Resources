@@ -1,29 +1,21 @@
 
-function vlc_player() {
   const videolink = window.location.href;
   const streamlink = videolink.replace("/watch/", "/download/");
-  const clean = streamlink.replace(/^https?:\/\//, "");
-  
-  // VLC के लिए proper intent - यह automatically app open करेगा
-  window.location.href = `intent://${clean}#Intent;action=android.intent.action.VIEW;package=org.videolan.vlc;type=video/*;S.browser_fallback_url=https://play.google.com/store/apps/details?id=org.videolan.vlc;end`;
-}
 
-function mx_player() {
-  const videolink = window.location.href;
-  const streamlink = videolink.replace("/watch/", "/download/");
-  const clean = streamlink.replace(/^https?:\/\//, "");
-  
-  // MX Player के लिए proper intent - Play Store redirect नहीं होगा
-  window.location.href = `intent://${clean}#Intent;action=android.intent.action.VIEW;package=com.mxtech.videoplayer.ad;type=video/*;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.mxtech.videoplayer.ad;end`;
-}
+  function vlc_player() {
+    const clean = streamlink.replace(/^https?:\/\//, "");
+    window.location.href = `vlc://${clean}`;
+  }
 
-function playit_player() {
-  const videolink = window.location.href;
-  const streamlink = videolink.replace("/watch/", "/download/");
-  const clean = streamlink.replace(/^https?:\/\//, "");
-  
-  window.location.href = `intent://${clean}#Intent;action=android.intent.action.VIEW;package=com.playit.videoplayer;type=video/*;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.playit.videoplayer;end`;
-}
+  function mx_player() {
+    const clean = streamlink.replace(/^https?:\/\//, "");
+    window.location.href = `intent://${clean}#Intent;scheme=https;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`;
+  }
+
+  function playit_player() {
+    const clean = streamlink.replace(/^https?:\/\//, "");
+    window.location.href = `intent://${clean}#Intent;package=com.playit.videoplayer;action=android.intent.action.VIEW;end`;
+  }
 
 function streamDownload() {
   const videolink = window.location.href;
