@@ -1,33 +1,27 @@
-// play.js file content
 function vlc_player() {
   const videolink = window.location.href;
-  const streamlink = videolink.replace("/watch/", "/download/");
-  const clean = streamlink.replace(/^https?:\/\//, "");
-  window.location.href = `vlc://${clean}`;
+  const streamlink = videolink.replace("/watch/", "/download/").replace(/^https?:\/\//, "");
+  window.location.href = `vlc://${streamlink}`;
 }
 
 function mx_player() {
   const videolink = window.location.href;
-  const streamlink = videolink.replace("/watch/", "/download/");
-  const clean = streamlink.replace(/^https?:\/\//, "");
-  window.location.href = `intent://${clean}#Intent;scheme=https;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`;
+  const streamlink = videolink.replace("/watch/", "/download/").replace(/^https?:\/\//, "");
+  window.location.href = `intent://${streamlink}#Intent;scheme=https;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`;
 }
 
 function playit_player() {
   const videolink = window.location.href;
-  const streamlink = videolink.replace("/watch/", "/download/");
-  const clean = streamlink.replace(/^https?:\/\//, "");
-  window.location.href = `intent://${clean}#Intent;package=com.playit.videoplayer;action=android.intent.action.VIEW;end`;
+  const streamlink = videolink.replace("/watch/", "/download/").replace(/^https?:\/\//, "");
+  window.location.href = `intent://${streamlink}#Intent;package=com.playit.videoplayer;action=android.intent.action.VIEW;end`;
 }
 
 function shareButton() {
   if (navigator.share) {
-    const url = window.location.href;
-    const title = document.title;
     navigator.share({
-      title: title,
-      text: "Watch high-quality videos on this streaming platform.\n\n" + title + "\n",
-      url: url
+      title: document.title,
+      text: `Watch high-quality videos on this streaming platform.\n\n${document.title}\n`,
+      url: window.location.href
     })
     .then(() => console.log("Thanks for sharing!"))
     .catch(e => console.log(`Couldn't share because of ${e.message}`));
@@ -36,26 +30,18 @@ function shareButton() {
   }
 }
 
-// Copy link function
 function copyStreamLink() {
-  const videolink = window.location.href;
-  const streamlink = videolink.replace("/watch/", "/download/");
+  const streamlink = window.location.href.replace("/watch/", "/download/");
   navigator.clipboard.writeText(streamlink)
-    .then(() => {
-      showToast("Link copied to clipboard!");
-    })
-    .catch(err => {
-      console.error('Failed to copy: ', err);
-    });
+    .then(() => showToast("Link copied to clipboard!"))
+    .catch(err => console.error('Failed to copy: ', err));
 }
 
 function showToast(message) {
   const toast = document.getElementById('copy-toast') || createToast();
   toast.textContent = message;
   toast.classList.add('show');
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 2000);
+  setTimeout(() => toast.classList.remove('show'), 2000);
 }
 
 function createToast() {
@@ -77,39 +63,40 @@ function createToast() {
     transition: opacity 0.3s ease;
   `;
   document.body.appendChild(toast);
+  
+  // Add CSS for show class
+  const style = document.createElement('style');
+  style.textContent = '.toast.show { opacity: 1; }';
+  document.head.appendChild(style);
+  
   return toast;
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize Plyr if available
   if (typeof Plyr !== 'undefined') {
-    const player = new Plyr('.player', {
-      controls: [
-        'play-large', 'play', 'progress', 'current-time', 'duration', 'mute', 
-        'volume', 'settings', 'pip', 'airplay', 'fullscreen'
-      ],
+    new Plyr('.player', {
+      controls: ['play-large', 'play', 'progress', 'current-time', 'duration', 'mute', 'volume', 'settings', 'pip', 'airplay', 'fullscreen'],
       settings: ['quality', 'speed'],
       hideControls: false,
       autoplay: false
     });
   }
-  
-  // Add click events to buttons if they exist
-const copyBtn = document.getElementById('copy-link-btn');
-  if (copyBtn) {
-    copyBtn.addEventListener('click', copyStreamLink);
-  }
-  
-const buttons = document.querySelectorAll('.action-btn');
-  buttons.forEach(btn => {
+
+  // Add copy button event listener
+  const copyBtn = document.getElementById('copy-link-btn');
+  if (copyBtn) copyBtn.addEventListener('click', copyStreamLink);
+
+  // Add touch effects to action buttons
+  document.querySelectorAll('.action-btn').forEach(btn => {
     btn.addEventListener('touchstart', function() {
       this.style.transform = 'translateY(2px)';
       this.style.boxShadow = '0 2px 15px rgba(99, 102, 241, 0.4)';
     });
-    
-btn.addEventListener('touchend', function() {
-   this.style.transform = '';
-   this.style.boxShadow = '';
+
+    btn.addEventListener('touchend', function() {
+      this.style.transform = '';
+      this.style.boxShadow = '';
     });
   });
 });
