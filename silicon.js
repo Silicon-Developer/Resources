@@ -1,4 +1,3 @@
-
 function openReport() {
   document.getElementById("myForm").style.display = "block";
 }
@@ -39,6 +38,36 @@ function showAdsLinkModal(url) {
     }
   }, 1000);
 }
+document.addEventListener("DOMContentLoaded", () => {
+  Plyr.setup("#myVideo", {
+    controls: ["play-large", "rewind", "audio", "play", "fast-forward", "progress", "current-time", "duration", "captions", "settings", "pip", "airplay", "fullscreen"]
+  });
+
+  const themeBtn = document.getElementById("theme-toggle-btn");
+  let theme = localStorage.getItem("theme") || "dark";
+
+  const applyTheme = mode => {
+    if (mode === "light") {
+      document.body.classList.remove("bg-dark", "text-light");
+      document.body.classList.add("bg-light", "text-dark");
+      themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i> Dark Mode';
+      themeBtn.classList.replace("btn-light", "btn-dark");
+    } else {
+      document.body.classList.remove("bg-light", "text-dark");
+      document.body.classList.add("bg-dark", "text-light");
+      themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i> Light Mode';
+      themeBtn.classList.replace("btn-dark", "btn-light");
+    }
+  };
+
+  themeBtn.addEventListener("click", () => {
+    const current = document.body.classList.contains("bg-dark") ? "light" : "dark";
+    localStorage.setItem("theme", current);
+    applyTheme(current);
+  });
+
+  applyTheme(theme);
+});
 
 function Open_Link(url) {
   if (url) window.open(url, "_blank");
@@ -54,7 +83,7 @@ function Open_TG(url) {
 }
 
 const videolink = window.location.href;
-const streamlink = videolink.replace("/watch/", "/download/");
+const streamlink = videolink.replace("/watch/", "/dl/");
 
 function vlc_player() {
   const clean = streamlink.replace(/^https?:\/\//, "");
@@ -72,81 +101,48 @@ function streamDownload() {
   window.location.href = streamlink;
 }
 
-// Copy link function
-function copyStreamLink() {
-  const videolink = window.location.href;
-  const streamlink = videolink.replace("/watch/", "/download/");
-  navigator.clipboard.writeText(streamlink)
-    .then(() => {
-      showToast("Link copied to clipboard!");
-    })
-    .catch(err => {
-      console.error('Failed to copy: ', err);
-    });
-}
-
-function showToast(message) {
-  const toast = document.getElementById('copy-toast') || createToast();
-  toast.textContent = message;
-  toast.classList.add('show');
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 2000);
-}
-
-function createToast() {
-  const toast = document.createElement('div');
-  toast.id = 'copy-toast';
-  toast.className = 'toast';
-  toast.style.cssText = `
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #6366f1;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+document.addEventListener("DOMContentLoaded", () => {
+  const style = document.createElement("style");
+  style.innerHTML = `
+    @keyframes devBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    .dev-icon {
+      display: inline-block;
+      animation: devBounce 1.2s infinite;
+      color: #0dcaf0;
+      margin-left: 6px;
+    }
+    .footer-text {
+      color: #0dcaf0;
+      text-decoration: none;
+    }
   `;
-  document.body.appendChild(toast);
-  return toast;
-}
+  document.head.appendChild(style);
 
-// Initialize Plyr when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof Plyr !== 'undefined') {
-    const player = new Plyr('.player', {
-      controls: [
-        'play-large', 'play', 'progress', 'current-time', 'duration', 'mute', 
-        'volume', 'settings', 'pip', 'airplay', 'fullscreen'
-      ],
-      settings: ['quality', 'speed'],
-      hideControls: false,
-      autoplay: false
-    });
-  }
-  
-  // Add click events to buttons if they exist
-const copyBtn = document.getElementById('copy-link-btn');
-  if (copyBtn) {
-    copyBtn.addEventListener('click', copyStreamLink);
-  }
-  
-const buttons = document.querySelectorAll('.action-btn');
-  buttons.forEach(btn => {
-    btn.addEventListener('touchstart', function() {
-      this.style.transform = 'translateY(2px)';
-      this.style.boxShadow = '0 2px 15px rgba(99, 102, 241, 0.4)';
-    });
-    
-btn.addEventListener('touchend', function() {
-    this.style.transform = '';
-    this.style.boxShadow = '';
-    });
-  });
+  const footer = document.createElement("footer");
+  footer.className = "py-2 text-center border-top border-secondary bg-dark text-light";
+
+  const para = document.createElement("p");
+  para.className = "mb-0";
+
+  const link = document.createElement("a");
+  link.href = "tg://resolve?domain=ABMovieHouse";
+  link.target = "_blank";
+  link.className = "footer-text";
+
+  const icon = document.createElement("i");
+  icon.className = "fa-solid fa-robot me-2";
+
+  const text = document.createTextNode("Made with by ABMovieHouse");
+  const devIcon = document.createElement("i");
+  devIcon.className = "fa-solid fa-laptop-code dev-icon";
+
+  link.appendChild(icon);
+  link.appendChild(text);
+  link.appendChild(devIcon);
+  para.appendChild(link);
+  footer.appendChild(para);
+  document.body.appendChild(footer);
 });
-
