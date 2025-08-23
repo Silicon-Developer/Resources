@@ -1,21 +1,20 @@
+const videolink = window.location.href;
+const streamlink = videolink.replace("/watch/", "/download/");
 
-  const videolink = window.location.href;
-  const streamlink = videolink.replace("/watch/", "/download/");
+function vlc_player() {
+  const clean = streamlink.replace(/^https?:\/\//, "");
+  window.location.href = `vlc://${clean}`;
+}
 
-  function vlc_player() {
-    const clean = streamlink.replace(/^https?:\/\//, "");
-    window.location.href = `vlc://${clean}`;
-  }
+function mx_player() {
+  const clean = streamlink.replace(/^https?:\/\//, "");
+  window.location.href = `intent://${clean}#Intent;scheme=https;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`;
+}
 
-  function mx_player() {
-    const clean = streamlink.replace(/^https?:\/\//, "");
-    window.location.href = `intent://${clean}#Intent;scheme=https;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`;
-  }
-
-  function playit_player() {
-    const clean = streamlink.replace(/^https?:\/\//, "");
-    window.location.href = `intent://${clean}#Intent;package=com.playit.videoplayer;action=android.intent.action.VIEW;end`;
-  }
+function playit_player() {
+  const clean = streamlink.replace(/^https?:\/\//, "");
+  window.location.href = `intent://${clean}#Intent;package=com.playit.videoplayer;action=android.intent.action.VIEW;end`;
+}
 
 function streamDownload() {
   const videolink = window.location.href;
